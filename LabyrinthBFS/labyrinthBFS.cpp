@@ -9,7 +9,7 @@ using namespace std;
 const int MazeHeight = 7;
 const int MazeWidth = 7;
 
-int Maze[7][7] = 
+int Maze[MazeHeight][MazeWidth] = 
 {
     1, 1, 1, 1, 1, 0, 1, 
     0, 0, 0, 0, 0, 0, 0, 
@@ -40,7 +40,7 @@ list<COORD> processed;
 
 
 void PrintMaze(){
-    printf(" ^\n");
+    printf(" X\n ^\n");
     for (int Y = 0; Y < 7; Y++)
     {
         printf("%d|  ", Y);
@@ -52,13 +52,14 @@ void PrintMaze(){
         printf("\n");
     }
     printf("------------------------->\n");
-    printf("      0  1  2  3  4  5  6\n");
+    printf("      0  1  2  3  4  5  6   Y\n");
 }
 
 void solveMaze(list<COORD> points){
     counter++;
 	cout << "WAVE " << counter-2 << ", label L=\"" << counter << "\"\n";
-	for (int i = 0; i < points.size(); ++i)
+    int stop = points.size();
+	for (int i = 0; i < stop; ++i)
     {
         COORD c = points.front();
         points.pop_front();
@@ -69,13 +70,13 @@ void solveMaze(list<COORD> points){
         if (Maze[c.X+1][c.Y] == Free) {
             overallCounter2++;
             COORD d(c.X+1,c.Y);
+            Maze[c.X+1][c.Y] = counter;
             if (d.X == 0 || d.Y == 0 || d.X == MazeWidth || d.Y == MazeHeight)
             {
                 cout << "Terminal." << endl;
                 return;
             }
-            points.push_back(d);
-            Maze[c.X+1][c.Y] = counter;
+            points.push_back(d);            
             cout << "Free. NEWN=" << overallCounter2 << ".\n";
 
         } else if (Maze[c.X+1][c.Y] == Wall){
@@ -88,13 +89,13 @@ void solveMaze(list<COORD> points){
         if (Maze[c.X][c.Y-1] == Free) {
             overallCounter2++;
             COORD d(c.X,c.Y-1);
+            Maze[c.X][c.Y-1] = counter;
             if (d.X == 0 || d.Y == 0 || d.X == MazeWidth || d.Y == MazeHeight)
             {
                 cout << "Terminal." << endl;
                 return;
             }
             points.push_back(d);
-            Maze[c.X][c.Y-1] = counter;
             cout << "Free. NEWN=" << overallCounter2 << ".\n";
 
         } else if (Maze[c.X][c.Y-1] == Wall){
@@ -107,13 +108,13 @@ void solveMaze(list<COORD> points){
         if (Maze[c.X-1][c.Y] == Free) {
             overallCounter2++;
             COORD d(c.X-1,c.Y);
+            Maze[c.X-1][c.Y] = counter;
             if (d.X == 0 || d.Y == 0 || d.X == MazeWidth || d.Y == MazeHeight)
                 {
                     cout << "Terminal." << endl;
                     return;
                 }
             points.push_back(d);
-            Maze[c.X-1][c.Y] = counter;
             cout << "Free. NEWN=" << overallCounter2 << ".\n";
 
         } else if (Maze[c.X-1][c.Y] == Wall){
@@ -127,13 +128,13 @@ void solveMaze(list<COORD> points){
         if (Maze[c.X][c.Y+1] == Free) {
             overallCounter2++;
             COORD d(c.X,c.Y+1);
+            Maze[c.X][c.Y+1] = counter;
             if (d.X == 0 || d.Y == 0 || d.X == MazeWidth || d.Y == MazeHeight)
             {
                 cout << "Terminal." << endl;
                 return;
             }
             points.push_back(d);
-            Maze[c.X][c.Y+1] = counter;
             cout << "Free. NEWN=" << overallCounter2 << ".\n";
 
         } else if (Maze[c.X][c.Y+1] == Wall){
