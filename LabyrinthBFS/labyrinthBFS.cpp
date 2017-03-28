@@ -63,47 +63,17 @@ void solveMaze(list<COORD> points){
         COORD c = points.front();
         points.pop_front();
 
-        if (c.X == 0 || c.Y == 0 || c.X == MazeWidth || c.Y == MazeHeight)
-        {
-            cout << "Terminal." << endl;
-            return;
-        }
-
         cout << "    Close CLOSE=" << overallCounter << ", X=" << c.X << ", Y=" << c.Y << ".\n";
 
-        cout << "        R1. X=" << c.X-1 << ", Y=" << c.Y << ". ";
-        if (Maze[c.X-1][c.Y] == Free) {
-            overallCounter2++;
-            COORD d(c.X-1,c.Y);
-            points.push_back(d);
-            Maze[c.X-1][c.Y] = counter;
-            cout << "Free. NEWN=" << overallCounter2 << ".\n";
-
-        } else if (Maze[c.X-1][c.Y] == Wall){
-            cout << "Wall.\n";
-        } else {
-            cout << "CLOSED or OPEN.\n";
-        }
-
-        cout << "        R2. X=" << c.X << ", Y=" << c.Y-1 << ". ";
-        if (Maze[c.X][c.Y-1] == Free) {
-            overallCounter2++;
-            COORD d(c.X,c.Y-1);
-            points.push_back(d);
-            Maze[c.X][c.Y-1] = counter;
-            cout << "Free. NEWN=" << overallCounter2 << ".\n";
-
-        } else if (Maze[c.X][c.Y-1] == Wall){
-            cout << "Wall.\n";
-        } else {
-            cout << "CLOSED or OPEN.\n";
-        }
-
-
-        cout << "        R3. X=" << c.X+1 << ", Y=" << c.Y << ". ";
+        cout << "        R1. X=" << c.X+1 << ", Y=" << c.Y << ". ";
         if (Maze[c.X+1][c.Y] == Free) {
             overallCounter2++;
             COORD d(c.X+1,c.Y);
+            if (d.X == 0 || d.Y == 0 || d.X == MazeWidth || d.Y == MazeHeight)
+            {
+                cout << "Terminal." << endl;
+                return;
+            }
             points.push_back(d);
             Maze[c.X+1][c.Y] = counter;
             cout << "Free. NEWN=" << overallCounter2 << ".\n";
@@ -114,11 +84,54 @@ void solveMaze(list<COORD> points){
             cout << "CLOSED or OPEN.\n";
         }
 
+        cout << "        R2. X=" << c.X << ", Y=" << c.Y-1 << ". ";
+        if (Maze[c.X][c.Y-1] == Free) {
+            overallCounter2++;
+            COORD d(c.X,c.Y-1);
+            if (d.X == 0 || d.Y == 0 || d.X == MazeWidth || d.Y == MazeHeight)
+            {
+                cout << "Terminal." << endl;
+                return;
+            }
+            points.push_back(d);
+            Maze[c.X][c.Y-1] = counter;
+            cout << "Free. NEWN=" << overallCounter2 << ".\n";
+
+        } else if (Maze[c.X][c.Y-1] == Wall){
+            cout << "Wall.\n";
+        } else {
+            cout << "CLOSED or OPEN.\n";
+        }
+
+        cout << "        R3. X=" << c.X-1 << ", Y=" << c.Y << ". ";
+        if (Maze[c.X-1][c.Y] == Free) {
+            overallCounter2++;
+            COORD d(c.X-1,c.Y);
+            if (d.X == 0 || d.Y == 0 || d.X == MazeWidth || d.Y == MazeHeight)
+                {
+                    cout << "Terminal." << endl;
+                    return;
+                }
+            points.push_back(d);
+            Maze[c.X-1][c.Y] = counter;
+            cout << "Free. NEWN=" << overallCounter2 << ".\n";
+
+        } else if (Maze[c.X-1][c.Y] == Wall){
+            cout << "Wall.\n";
+        } else {
+            cout << "CLOSED or OPEN.\n";
+        }
+
 
         cout << "        R4. X=" << c.X << ", Y=" << c.Y+1 << ". ";
         if (Maze[c.X][c.Y+1] == Free) {
             overallCounter2++;
             COORD d(c.X,c.Y+1);
+            if (d.X == 0 || d.Y == 0 || d.X == MazeWidth || d.Y == MazeHeight)
+            {
+                cout << "Terminal." << endl;
+                return;
+            }
             points.push_back(d);
             Maze[c.X][c.Y+1] = counter;
             cout << "Free. NEWN=" << overallCounter2 << ".\n";
