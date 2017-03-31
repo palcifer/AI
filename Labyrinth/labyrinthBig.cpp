@@ -2,35 +2,25 @@
 #include <unistd.h>
 #include <iomanip>
 #include <iostream>
+#include <math.h> 
 
 using namespace std;
 
-const int MazeHeight = 7;
-const int MazeWidth = 7;
+const int MazeHeight = 10;
+const int MazeWidth = 15;
 
-int Maze2[10][15] = 
+int Maze[MazeHeight][MazeWidth] = 
 {
     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  
     1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  
     1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  
-    1,  0,  0,  0,  0,  0,  1,  1,  1,  0,  0,  0,  0,  0,  1,  
+    1,  0,  0,  0,  2,  0,  1,  1,  1,  0,  0,  0,  0,  0,  1,  
     1,  0,  1,  1,  1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  
     1,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  
     1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  
     1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  0,  1,  
     1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  1,  
     1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  
-};
-
-int Maze[7][7] = 
-{
-    1, 1, 1, 1, 1, 0, 1, 
-    0, 0, 0, 0, 0, 0, 0, 
-    1, 1, 1, 1, 0, 1, 1, 
-    1, 0, 0, 0, 0, 1, 1, 
-    1, 0, 1, 0, 1, 1, 1, 
-    1, 0, 0, 0, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1,  
 };
 
 const int Wall = 1;
@@ -48,21 +38,27 @@ public:
 };
 
 COORD StartingPoint(4, 3);
+COORD EndPoint(0,0);
+COORD zeroPoint(0,0);
 
-void PrintMaze2(){
-    printf(" ^\n");
+
+int yMove[4] = {-1, 0, 1, 0};
+int xMove[4] = {0, 1, 0, -1};
+
+void PrintMaze2(int Maze2[MazeHeight][MazeWidth]){
+    printf(" Y\n ^\n");
     for (int Y = 0; Y < MazeHeight; Y++)
     {
         printf("%d|  ", Y);
         for (int X = 0; X < MazeWidth; X++)
             {
                 //printf("%d  ", Maze2[Y][X]);
-                cout << std::setfill(' ') << setw(3) << Maze[Y][X];
+                cout << std::setfill(' ') << setw(3) << Maze2[Y][X];
             }
         printf("\n");
     }
     printf("------------------------------------------------->\n");
-    printf("      0  1  2  3  4  5  6  7  8  9 10 11 12 13 14\n");
+    printf("      0  1  2  3  4  5  6  7  8  9 10 11 12 13 14  X\n");
 }
 
 void PrintMaze(){
@@ -90,7 +86,7 @@ string returnDashes(int n){
     return s;
 }
 
-bool SolveMaze2(int X, int Y)
+bool SolveMaze(int X, int Y)
 {
     // Make the move (if it's wrong, we will backtrack later.
     counter++;
@@ -104,9 +100,11 @@ bool SolveMaze2(int X, int Y)
     //sleep(1);
 
     // Check if we have reached our goal.
-    if (X == 0 || Y == 0 || X == MazeWidth || Y == MazeHeight)
+    if (X == 0 || Y == 0 || X == MazeWidth-1 || Y == MazeHeight-1)
     {
-        cout << "Terminal" << endl;
+        cout << "   Terminal.\n" << endl;
+        EndPoint.X = X;
+        EndPoint.Y = Y;
         return true;
     }
 
@@ -114,7 +112,7 @@ bool SolveMaze2(int X, int Y)
     if (X > 0 && Maze[Y][X - 1] == Free)
     {
         cout << std::setfill(' ') << setw(6) << overallCounter << ") " << returnDashes(counter-2)<< "R1. U=" << X << ", V=" << Y << ". Free. L=L+1=" << counter << ". LAB[" << X << "," << Y << "]=" << counter << "." << endl;
-        if (SolveMaze2(X - 1, Y)) return true;
+        if (SolveMaze(X - 1, Y)) return true;
     } else {
         cout << std::setfill(' ') << setw(6) << overallCounter << ") " << returnDashes(counter-2)<< "R1. U=" << X << ", V=" << Y << ". Wall." << endl;
         overallCounter++;
@@ -122,7 +120,7 @@ bool SolveMaze2(int X, int Y)
     if (Y < MazeHeight && Maze[Y + 1][X] == Free)
     {
         cout << std::setfill(' ') << setw(6) << overallCounter << ") " << returnDashes(counter-2)<< "R2. U=" << X << ", V=" << Y << ". Free. L=L+1=" << counter << ". LAB[" << X << "," << Y << "]=" << counter << "." << endl;
-        if (SolveMaze2(X, Y + 1)) return true;
+        if (SolveMaze(X, Y + 1)) return true;
     } else {
         cout << std::setfill(' ') << setw(6) << overallCounter << ") " << returnDashes(counter-2)<< "R2. U=" << X << ", V=" << Y << ". Wall." << endl;
         overallCounter++;
@@ -130,7 +128,7 @@ bool SolveMaze2(int X, int Y)
     if (X < MazeWidth && Maze[Y][X + 1] == Free)
     {
         cout << std::setfill(' ') << setw(6) << overallCounter << ") " << returnDashes(counter-2)<< "R3. U=" << X << ", V=" << Y << ". Free. L=L+1=" << counter << ". LAB[" << X << "," << Y << "]=" << counter << "." << endl;
-        if (SolveMaze2(X + 1, Y)) return true;
+        if (SolveMaze(X + 1, Y)) return true;
     } else {
         cout << std::setfill(' ') << setw(6) << overallCounter << ") " << returnDashes(counter-2)<< "R3. U=" << X << ", V=" << Y << ". Wall." << endl;
         overallCounter++;
@@ -138,7 +136,7 @@ bool SolveMaze2(int X, int Y)
     if (Y > 0 && Maze[Y - 1][X] == Free)
     {
         cout << std::setfill(' ') << setw(6) << overallCounter << ") " << returnDashes(counter-2)<< "R4. U=" << X << ", V=" << Y << ". Free. L=L+1=" << counter << ". LAB[" << X << "," << Y << "]=" << counter << "." << endl;
-        if (SolveMaze2(X, Y - 1)) return true;
+        if (SolveMaze(X, Y - 1)) return true;
     } else {
         cout << std::setfill(' ') << setw(6) << overallCounter << ") " << returnDashes(counter-2)<< "R4. U=" << X << ", V=" << Y << ". Wall." << endl;
         overallCounter++;
@@ -155,77 +153,92 @@ bool SolveMaze2(int X, int Y)
     return false;
 }
 
-bool SolveMaze(int X, int Y)
-{
-    // Make the move (if it's wrong, we will backtrack later.
-    counter++;
-    //char c = '0' + counter;
-    //Maze[Y][X] = SomeDude;
-    Maze[Y][X] = counter;
+void printResult(COORD c){
 
-    // If you want progressive update, uncomment these lines...
-    //PrintDaMaze();
-    //sleep(1);
+    if (c.X == zeroPoint.X && c.Y == zeroPoint.Y) {
+        cout << "  3.1. No tracable path";
+        return;
+    } else {
+        cout << "  3.1. Path is found.\n\n";
+    }
+    int MazeResult[MazeHeight][MazeWidth] = {0};
+    int resultCounter = Maze[c.Y][c.X];
+    MazeResult[c.Y][c.X] = -2;
+    string resultPath = "";
+    string xs = std::to_string(c.X);
+    string ys = std::to_string(c.Y);
+    reverse(ys.begin(), ys.end());
+    reverse(xs.begin(), xs.end());
+    string nodesPath = " ,]" + ys + "=Y," + xs + "=X[";
 
-    // Check if we have reached our goal.
-    if (X == 0 || Y == 0 || X == 6 || Y == 6)
-    {
-        return true;
+    while(resultCounter > 2){
+        resultCounter--;
+        for (int i = 0; i < 4; ++i)
+        {
+            if (Maze[c.Y + yMove[i]][c.X + xMove[i]] == resultCounter) {
+                MazeResult[c.Y + yMove[i]][c.X + xMove[i]] = -2;
+                int j = i;
+                if (i == 0) j=3;
+                if (i == 1) j=4;
+                if (i == 2) j=1;
+                if (i == 3) j=2;
+                resultPath += " ," + std::to_string(j) + "R";
+                if(floor((float)(c.X + xMove[i])/10)>0) {
+                    string hhh = std::to_string(c.X + xMove[i]);
+                    reverse(hhh.begin(), hhh.end());
+                    nodesPath += " ,]" + std::to_string(c.Y + yMove[i]) + "=Y," + hhh + "=X[";
+                } else {
+                    nodesPath += " ,]" + std::to_string(c.Y + yMove[i]) + "=Y," + std::to_string(c.X + xMove[i]) + "=X[";
+                }
+                c.X = c.X + xMove[i];
+                c.Y = c.Y + yMove[i];
+                break;
+            }
+        }
     }
 
-    // Recursively search for our goal.
-    if (X > 0 && Maze[Y][X - 1] == Free && SolveMaze(X - 1, Y))
-    {
-        return true;
-    }
-    if (Y < MazeHeight && Maze[Y + 1][X] == Free && SolveMaze(X, Y + 1))
-    {
-        return true;
-    }
-    if (X < MazeWidth && Maze[Y][X + 1] == Free && SolveMaze(X + 1, Y))
-    {
-        return true;
-    }
-    if (Y > 0 && Maze[Y - 1][X] == Free && SolveMaze(X, Y - 1))
-    {
-        return true;
-    }
 
-    // Otherwise we need to backtrack and find another solution.
-    counter--;
-    //Maze[Y][X] = Free;
+    for (int Y = 0; Y < MazeHeight; Y++)
+    {
+        for (int X = 0; X < MazeWidth; X++)
+            {
+                if(MazeResult[Y][X] == -2) {
+                    MazeResult[Y][X] = Maze[Y][X];
+                } else {
+                    if (Maze[Y][X] == 1) {
+                        MazeResult[Y][X] = 1;
+                    } else if (Maze[Y][X] == 0){
+                        MazeResult[Y][X] = 0;
+                    } else {
+                        MazeResult[Y][X] = -1;
+                    }
+                } 
+            }
+    }
+    cout << "  3.2. Path graphically\n\n";
+    PrintMaze2(MazeResult);
 
-    // If you want progressive update, uncomment these lines...
-    //PrintDaMaze();
-    //Sleep(50);
-    return false;
+    reverse(resultPath.begin(), resultPath.end());
+    cout << "\n  3.3. Rules: " << resultPath.substr(0, resultPath.length() - 2) << endl;
+    
+    reverse(nodesPath.begin(), nodesPath.end());
+    cout << "\n  3.4. Nodes: " << nodesPath.substr(0, nodesPath.length() - 2) << endl;
+    return;
 }
 
 int main(int argc, char* argv[])
 {
     counter = 1;
     overallCounter = 0;
-    PrintMaze2();
-    bool maze7x7 = false;
-    if(maze7x7){
-        if (SolveMaze(StartingPoint.X, StartingPoint.Y))
+    PrintMaze2(Maze);
+    if (SolveMaze(StartingPoint.X, StartingPoint.Y))
         {
-            PrintMaze();
+            printResult(EndPoint);
         }
-        else
+    else
         {
             printf("No successfull resolution.\n");
         }
-    } else {
-        if (SolveMaze2(StartingPoint.X, StartingPoint.Y))
-        {
-            PrintMaze2();
-        }
-        else
-        {
-            printf("No successfull resolution.\n");
-        }
-    }
 
     return 0;
 }
