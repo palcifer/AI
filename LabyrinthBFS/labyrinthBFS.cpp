@@ -117,6 +117,11 @@ void printResult(COORD c){
     MazeResult[c.X][c.Y] = -2;
     string resultPath = "";
     string nodesPath = "";
+    string xs = std::to_string(c.X);
+    string ys = std::to_string(c.Y);
+    reverse(ys.begin(), ys.end());
+    reverse(xs.begin(), xs.end());
+    nodesPath += " ,]" + ys + "=Y," + xs + "=X[";
 
     while(resultCounter > 2){
         resultCounter--;
@@ -130,7 +135,11 @@ void printResult(COORD c){
                 if (i == 2) j=1;
                 if (i == 3) j=2;
                 resultPath += " ," + std::to_string(j) + "R";
-                nodesPath += " ,]" + std::to_string(c.Y + yMove[i]) + "=Y," + std::to_string(c.X + xMove[i]) + "=X[";
+                string xs = std::to_string(c.X + xMove[i]);
+                string ys = std::to_string(c.Y + yMove[i]);
+                reverse(ys.begin(), ys.end());
+                reverse(xs.begin(), xs.end());
+                nodesPath += " ,]" + ys + "=Y," + xs + "=X[";
                 c.X = c.X + xMove[i];
                 c.Y = c.Y + yMove[i];
                 break;
