@@ -1,0 +1,14 @@
+Rules :
+0: L -> A
+1: K -> L
+2: A -> D
+3: M -> D
+4: Z F -> B
+5: F C -> D
+6: D -> A
+
+Facts :
+A B C 
+
+End symbol :
+Z
