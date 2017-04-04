@@ -1,2 +1,0 @@
-# AI
-VU school assignments
