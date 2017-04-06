@@ -1,14 +1,60 @@
-Rules :
-0: L -> A
-1: K -> L
-2: A -> D
-3: M -> D
-4: Z F -> B
-5: F C -> D
-6: D -> A
+PART 1. Data
 
-Facts :
-A B C 
+  1) Rules :
+     R0: A -> L
+     R1: L -> K
+     R2: D -> A
+     R3: D -> M
+     R4: F, B -> Z
+     R5: C, D -> F
+     R6: A -> D
 
-End symbol :
-Z
+  2) Facts
+     A, B, C
+
+  3) Goal 
+     Z
+
+PART 2. Trace
+
+  ITERATION 0
+     R0:A->L apply. Raise flag1. Facts A, B, C and L.
+
+  ITERATION 1
+     R0:A->L skip, because flag1 raised.
+     R1:L->K apply. Raise flag1. Facts A, B, C and L, K.
+
+  ITERATION 2
+     R0:A->L skip, because flag1 raised.
+     R1:L->K skip, because flag1 raised.
+     R2:D->A not applied, because of lacking D.
+     R3:D->M not applied, because of lacking D.
+     R4:F, B->Z not applied, because of lacking F.
+     R5:C, D->F not applied, because of lacking D.
+     R6:A->D apply. Raise flag1. Facts A, B, C and L, K, D.
+
+  ITERATION 3
+     R0:A->L skip, because flag1 raised.
+     R1:L->K skip, because flag1 raised.
+     R2:D->A not applied, because RHS in facts. Raise flag2.
+     R3:D->M apply. Raise flag1. Facts A, B, C and L, K, D, M.
+
+  ITERATION 4
+     R0:A->L skip, because flag1 raised.
+     R1:L->K skip, because flag1 raised.
+     R2:D->A skip, because flag2 raised.
+     R3:D->M skip, because flag1 raised.
+     R4:F, B->Z not applied, because of lacking F.
+     R5:C, D->F apply. Raise flag1. Facts A, B, C and L, K, D, M, F.
+
+  ITERATION 5
+     R0:A->L skip, because flag1 raised.
+     R1:L->K skip, because flag1 raised.
+     R2:D->A skip, because flag2 raised.
+     R3:D->M skip, because flag1 raised.
+     R4:F, B->Z apply. Raise flag1. Facts A, B, C and L, K, D, M, F, Z.
+     Goal achieved.
+
+PART 3. Results
+   1) Goal Z achieved.
+   2) Path: R0, R1, R6, R3, R5, R4.
