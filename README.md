@@ -1,5 +1,5 @@
 # AI
-Vilnius University - Artificial Intelligence class by Vytautas Čyras
+Vilnius University - Artificial Intelligence class by Vytautas Čyras<br />
 Topics so far:
 - Hanoi Towers
 - Knights Run
