@@ -7,8 +7,8 @@ Topics so far:
 - Labyrinth BFS
 - Forward Chaining
 
-Everything written in C11 c++ code, compiled with g++ compiler
-g++ app.cpp -o app.out
+Everything written in C11 c++ code, compiled with g++ compiler <br />
+`g++ app.cpp -o app.out`
 
-run
-./app.out
+run <br />
+`./app.out`
