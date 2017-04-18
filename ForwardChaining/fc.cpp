@@ -16,17 +16,17 @@ list<char> facts;
 char endsymbol;
 
 enum parseState {
-	p_begin, 
-	p_rules, 
-	p_facts, 
-	p_end
+  p_begin, 
+  p_rules, 
+  p_facts, 
+  p_end
 };
 
 string path = "";
 
 void parseInput(){
   string line;
-  ifstream input ("input.txt");
+  ifstream input ("input1.txt");
 
   parseState state = p_begin;
   int counter = 0;
@@ -35,23 +35,23 @@ void parseInput(){
   {
     while ( getline (input,line) )
     {
-		if(isdigit(line[0])){
-			switch(line[3]){
-				case 'R': state = p_rules;
-					break;
-				case 'F': state = p_facts;
-					break;
-				case 'G': state = p_end;
-					break;
-			}
+    if(isdigit(line[0])){
+      switch(line[3]){
+        case 'R': state = p_rules;
+          break;
+        case 'F': state = p_facts;
+          break;
+        case 'G': state = p_end;
+          break;
+      }
             continue;
-  		}
+      }
         if (state == p_rules) {
             for (int i = 0; i < line.length(); ++i)
             {
                 char c = line.at(i);
                 if(c == '/') break;
-                if(c >= 'A' && c <= 'Z') rulesTmp.push_back(c);
+                if(c >= 'A' && c <= 'Z') rulesTmp.push_front(c);
                 //cout << c << endl;
             }
             if(!rulesTmp.empty()){
@@ -77,7 +77,7 @@ void parseInput(){
     input.close();
   }
 
-  else cout << "Unable to open file"; 
+  else cout << "Unable to open file\n"; 
   
   return;
 }
@@ -123,7 +123,7 @@ bool calculateForwardChaining(ofstream& output){
     int flags[rules.size()];
     memset( flags, 0, rules.size()*sizeof(int) );
 
-
+    bool anythingChanged = false;
     while(true){
         if ((std::find(facts.begin(), facts.end(), endsymbol) != facts.end())) {
           output << "     Goal achieved.\n\n";
@@ -132,6 +132,7 @@ bool calculateForwardChaining(ofstream& output){
         output << "\n  ITERATION " << counter << endl;
         for (int i = 0; i < rules.size(); ++i)
         {
+          anythingChanged = false;
           output << "     R" << i << ":";
           list<char> rulesInit = rules[i];
           rulesInit.pop_back();
@@ -180,6 +181,7 @@ bool calculateForwardChaining(ofstream& output){
               facts.push_back(ch);
             }
             output << "." << endl;
+            anythingChanged = true;
             break;
           } else {
             output << "not applied, because of lacking " << c << ".\n";
@@ -187,49 +189,57 @@ bool calculateForwardChaining(ofstream& output){
           
         }
         counter++;
-        if(counter == 7) facts.push_back(endsymbol);
+        if(anythingChanged == false) return false;
     } 
 
-    return (facts.back() == 'Z') ? true : false;
+    return (facts.back() == endsymbol) ? true : false;
 }
 
 void printInitialSetting(){
-	ofstream output;
-  	output.open("output.txt");
+  ofstream output;
+    output.open("output.txt");
 
     output << "PART 1. Data\n\n";
 
-  	output << "  1) Rules :\n";
-  	for (int i = 0; i < rules.size(); ++i)
-  	{
-  		rulesTmp = rules[i];
-  		output << "     R" << i << ": ";
-  		while(!rulesTmp.empty()){
-  			if (rulesTmp.size() == 1){
-  				output << "-> " << rulesTmp.front() << endl;
-	  			rulesTmp.pop_front();
-  			} else if (rulesTmp.size() == 2){
-	  			output << rulesTmp.front() << " ";
-	  			rulesTmp.pop_front();
-  			} else {
+    output << "  1) Rules :\n";
+    for (int i = 0; i < rules.size(); ++i)
+    {
+      rulesTmp = rules[i];
+      output << "     R" << i << ": ";
+      while(!rulesTmp.empty()){
+        if (rulesTmp.size() == 1){
+          output << "-> " << rulesTmp.front() << endl;
+          rulesTmp.pop_front();
+        } else if (rulesTmp.size() == 2){
+          output << rulesTmp.front() << " ";
+          rulesTmp.pop_front();
+        } else {
           output << rulesTmp.front() << ", ";
           rulesTmp.pop_front();
         }
-  		}
-  	}
+      }
+    }
 
 
-   	
-  	output << "\n  2) Facts\n     ";
+    
+    output << "\n  2) Facts\n     ";
 
-  	for(int i = 0; i < facts.size(); i++){
+    for(int i = 0; i < facts.size(); i++){
       char ch = facts.front();
-  		if (i != facts.size()-1) output << ch << ", ";
+      if (i != facts.size()-1) output << ch << ", ";
       else output << ch;
-  		facts.pop_front();
+      facts.pop_front();
       facts.push_back(ch);
-  	}
-  	output << "\n\n  3) Goal \n     " << endsymbol << endl;
+    }
+    output << "\n\n  3) Goal \n     " << endsymbol << endl;
+
+    for (std::list<char>::const_iterator iterator = facts.begin(), end = facts.end(); iterator != end; ++iterator) {
+      if (*iterator == endsymbol){
+        output << "\nPART 3. Results\n" << "   1) Goal " << endsymbol << " in facts. Empty path.\n";
+        output.close();
+        return;
+      }
+    }
 
 
     if (calculateForwardChaining(output)) {
@@ -238,8 +248,8 @@ void printInitialSetting(){
       output << "PART 3. Results\n" << "   1) Goal " << endsymbol << " not achieved." << endl;
     }
 
-  	output.close();
-	return;
+    output.close();
+  return;
 }
 
 int main () {

@@ -1,0 +1,22 @@
+PART 1. Data
+
+  1) Rules :
+     R0: A -> B
+     R1: C -> Z
+
+  2) Facts
+     A
+
+  3) Goal 
+     Z
+
+PART 2. Trace
+
+  ITERATION 0
+     R0:A->B apply. Raise flag1. Facts A, B.
+
+  ITERATION 1
+     R0:A->B skip, because flag1 raised.
+     R1:C->Z not applied, because of lacking C.
+PART 3. Results
+   1) Goal Z not achieved.
