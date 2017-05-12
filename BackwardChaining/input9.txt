@@ -1,0 +1,12 @@
+Student Pavol Ulbrich. Masaryk University, computer graphics. 
+Test 1. Initial fact in right hand side
+1) Rules
+Z A	// R1: A -> Z
+A B 	// R2: B -> A
+B A C 	// R3: T -> Z
+
+2) Facts
+T
+
+3) Goal
+T

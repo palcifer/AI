@@ -1,0 +1,51 @@
+PART 1. Data
+
+  1) Rules :
+     R0: D, C -> Z
+     R1: C -> D
+     R2: B -> C
+     R3: A -> B
+     R4: D -> A
+     R5: T -> D
+     R6: G -> A
+     R7: H -> B
+     R8: J -> C
+
+  2) Facts
+     T
+
+  3) Goal 
+     Z
+
+PART 2. Trace
+
+  1) Goal Z. Find R0:D,C->Z. New goals D, C, 
+  2) .Goal D. Find R1:C->D. New goals C, 
+  3) ..Goal C. Find R2:B->C. New goals B, 
+  4) ...Goal B. Find R3:A->B. New goals A, 
+  5) ....Goal A. Find R4:D->A. New goals D, 
+  6) .....Goal D. Loop. Back, FAIL.
+  7) ....Goal A. Find R6:G->A. New goals G, 
+  8) .....Goal G. No rules. Back, FAIL.
+  9) ....Goal A. No rules. Back, FAIL.
+ 10) ...Goal B. Find R7:H->B. New goals H, 
+ 11) ....Goal H. No rules. Back, FAIL.
+ 12) ...Goal B. No rules. Back, FAIL.
+ 13) ..Goal C. Find R8:J->C. New goals J, 
+ 14) ...Goal J. No rules. Back, FAIL.
+ 15) ..Goal J. No rules. Back, FAIL.
+ 16) .Goal D. Find R5:T->D. New goals T, 
+ 17) ..Goal T. Fact (initial), as facts are T . Back, OK.
+ 18) .Goal D. Fact (presentaly obtained), as facts are T D .
+ 19) .Goal C. Find R2:B->C. New goals B, 
+ 20) ..Goal B. Find R3:A->B. New goals A, 
+ 21) ...Goal A. Find R4:D->A. New goals D, 
+ 22) ....Goal D. Fact (presentaly obtained), as facts are T D .
+ 23) ...Goal A. Fact (presentaly obtained), as facts are T D A .
+ 24) ..Goal B. Fact (presentaly obtained), as facts are T D A B .
+ 25) .Goal C. Fact (presentaly obtained), as facts are T D A B C .
+ 26) .Goal Z. Fact (presentaly obtained), as facts are T D A B C Z . OK.
+
+PART 3. Results
+   1) Goal Z achieved.
+   2) Path: R0, R5, R2, R3, R4.

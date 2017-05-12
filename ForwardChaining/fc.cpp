@@ -1,4 +1,3 @@
-// reading a text file
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -123,7 +122,9 @@ bool calculateForwardChaining(ofstream& output){
     int flags[rules.size()];
     memset( flags, 0, rules.size()*sizeof(int) );
 
+    //check for changes during one iteration
     bool anythingChanged = false;
+
     while(true){
         if ((std::find(facts.begin(), facts.end(), endsymbol) != facts.end())) {
           output << "     Goal achieved.\n\n";
@@ -195,10 +196,11 @@ bool calculateForwardChaining(ofstream& output){
     return (facts.back() == endsymbol) ? true : false;
 }
 
-void printInitialSetting(){
+void printOutput(){
   ofstream output;
     output.open("output.txt");
 
+    //print initial setting
     output << "PART 1. Data\n\n";
 
     output << "  1) Rules :\n";
@@ -220,8 +222,6 @@ void printInitialSetting(){
       }
     }
 
-
-    
     output << "\n  2) Facts\n     ";
 
     for(int i = 0; i < facts.size(); i++){
@@ -256,7 +256,7 @@ int main () {
   
   parseInput();
 
-  printInitialSetting();
+  printOutput();
 
   return 0;
 }
